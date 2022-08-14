@@ -62,12 +62,29 @@ function App() {
 
   const F5 = () => {window.location.reload()}
 
-  const finished = () => {
+  const finished = async () => {
     var temp = []
     var sc = 0
     for (let i = 0; i < cards.length; i++) {
       if (Scores[i] === 0) {
         temp.push(cards[i].back);
+        await fetch("http://127.0.0.1:8000/update", {
+          method: "post", 
+          headers: {
+            "Accept": "application/json", 
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            data: {
+              id: cards[i].page_id,
+              properties: {
+                Score: {
+                  number: cards[i].scores + 1
+                }
+              }
+            }
+          })
+        })
       } else {
         sc += 1
       }
